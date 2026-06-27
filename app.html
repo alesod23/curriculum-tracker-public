@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curriculum</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%A4%93</text></svg>">
+<style>
+  :root {
+    --bg: #fafaf9; --surface: #ffffff; --ink: #1c1917; --ink-soft: #57534e;
+    --ink-faint: #a8a29e; --line: #e7e5e4; --accent: #1d4ed8; --accent-soft: #eff6ff;
+    --green: #15803d; --green-soft: #f0fdf4; --amber: #b45309; --amber-soft: #fffbeb;
+    --red: #b91c1c; --red-soft: #fef2f2;
+    --cw-width: 380px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 -apple-system, "Segoe UI", system-ui, sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header {
+    position: sticky; top: 0; z-index: 30; background: var(--surface);
+    border-bottom: 1px solid var(--line); display: flex; align-items: center;
+    gap: 16px; padding: 10px 24px;
+  }
+  header h1 { font-size: 16px; margin: 0 16px 0 0; font-weight: 650; }
+  .tabs { display: flex; gap: 4px; }
+  .tab { border: 0; background: none; font: inherit; color: var(--ink-soft);
+    padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+  .tab:hover { background: var(--bg); }
+  .tab.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .badge { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 6px;
+    background: var(--accent); color: #fff; border-radius: 9px; font-size: 11px;
+    line-height: 18px; text-align: center; font-weight: 600; }
+  .badge.zero { background: var(--ink-faint); }
+  header .spacer { flex: 1; }
+  header input[type="search"] { border: 1px solid var(--line); border-radius: 6px;
+    padding: 6px 10px; font: inherit; width: 220px; background: var(--bg); }
+  .weekly-link { font-size: 13px; color: var(--ink-soft); }
+
+  main { max-width: 980px; margin: 0 auto; padding: 24px; transition: margin-right 0.2s; }
+  body.cw-open main { margin-right: var(--cw-width); }
+
+  /* ---- curriculum ---- */
+  .phase { margin-bottom: 28px; }
+  .phase-head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 4px; }
+  .phase-head h2 { font-size: 17px; margin: 0; }
+  .phase-num { color: var(--ink-faint); font-size: 13px; font-weight: 600; }
+  .phase-desc { color: var(--ink-soft); font-size: 13px; margin: 0 0 12px; max-width: 760px; }
+
+  .topic { background: var(--surface); border: 1px solid var(--line);
+    border-radius: 8px; margin-bottom: 8px; }
+  .topic-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; }
+  .topic-row:hover { background: #fcfcfb; }
+  .topic-title { font-weight: 600; }
+  .topic-desc { color: var(--ink-faint); font-size: 13px; flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .counts { color: var(--ink-faint); font-size: 12px; white-space: nowrap; }
+
+  .pill { border: 1px solid var(--line); background: var(--bg); color: var(--ink-soft);
+    font: 600 11px/1 inherit; font-family: inherit; padding: 5px 9px; border-radius: 999px;
+    cursor: pointer; white-space: nowrap; }
+  .pill.introduced { background: var(--amber-soft); border-color: #fde68a; color: var(--amber); }
+  .pill.mastered { background: var(--green-soft); border-color: #bbf7d0; color: var(--green); }
+
+  .chat-btn { border: 1px solid var(--line); background: var(--surface); color: var(--accent);
+    font: 600 11px/1 inherit; font-family: inherit; padding: 5px 10px; border-radius: 6px;
+    cursor: pointer; white-space: nowrap; }
+  .chat-btn:hover { background: var(--accent-soft); }
+
+  .strength { font: 600 11px/1 inherit; padding: 4px 8px; border-radius: 999px;
+    white-space: nowrap; border: 1px solid var(--line); }
+  .strength.weak { background: var(--red-soft); color: var(--red); border-color: #fecaca; }
+  .strength.developing { background: var(--amber-soft); color: var(--amber); border-color: #fde68a; }
+  .strength.solid { background: var(--accent-soft); color: var(--accent); border-color: #bfdbfe; }
+  .strength.strong { background: var(--green-soft); color: var(--green); border-color: #bbf7d0; }
+
+  .topic-body { border-top: 1px solid var(--line); padding: 14px 16px; display: none; }
+  .topic.open .topic-body { display: block; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-faint); margin: 16px 0 6px; }
+  .topic-body .section-label:first-child { margin-top: 0; }
+
+  .video-line { font-size: 14px; }
+  .video-meta { color: var(--ink-faint); font-size: 12px; margin-left: 8px; }
+  .lesson-def { max-width: 760px; }
+  pre { background: #292524; color: #fafaf9; padding: 12px 14px; border-radius: 6px;
+    overflow-x: auto; font: 12.5px/1.5 ui-monospace, Consolas, monospace; margin: 8px 0; }
+  .example-purpose { color: var(--ink-soft); font-size: 13px; margin: 4px 0 0; }
+  .fp { margin: 8px 0; max-width: 760px; }
+  .fp-q { font-weight: 600; font-size: 14px; }
+  .fp-a { color: var(--ink-soft); font-size: 14px; margin: 2px 0 0; }
+
+  /* rendered-markdown spacing */
+  .lesson-def p, .fp-a p, .bubble p { margin: 0 0 8px; }
+  .lesson-def p:last-child, .fp-a p:last-child, .bubble p:last-child { margin-bottom: 0; }
+  .lesson-def ul, .lesson-def ol, .fp-a ul, .fp-a ol, .bubble ul, .bubble ol { margin: 6px 0; padding-left: 20px; }
+  .lesson-def li, .fp-a li, .bubble li { margin: 3px 0; }
+  .lesson-def code, .fp-a code, .bubble code, .wa-example code, .example-purpose code {
+    background: rgba(0,0,0,0.06); padding: 1px 4px; border-radius: 4px;
+    font: 12px ui-monospace, Consolas, monospace; }
+  .msg.user .bubble code { background: rgba(255,255,255,0.22); color: #fff; }
+
+  /* lesson edit / undo */
+  .lesson-head { display: flex; align-items: center; gap: 10px; margin: 16px 0 6px; }
+  .lesson-head .section-label { margin: 0; }
+  .mini-btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+    font: 600 11px inherit; font-family: inherit; padding: 4px 9px; border-radius: 6px; cursor: pointer; }
+  .mini-btn:hover { background: var(--bg); color: var(--ink); }
+  .edit-def, .edit-code { width: 100%; border: 1px solid var(--line); border-radius: 6px;
+    padding: 8px 10px; font: 13px/1.5 ui-monospace, Consolas, monospace; resize: vertical; box-sizing: border-box; }
+  .edit-purpose { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px;
+    font: inherit; margin-top: 6px; box-sizing: border-box; }
+  .fp-edit-row { display: flex; gap: 6px; align-items: flex-start; margin: 6px 0; }
+  .fp-edit-row .fp-q-in { flex: 0 0 34%; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font: inherit; box-sizing: border-box; }
+  .fp-edit-row .fp-a-in { flex: 1; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font: inherit; resize: vertical; box-sizing: border-box; }
+  .edit-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+  .wa-example { background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 12px; margin: 6px 0; font-size: 13.5px; }
+  .wa-meta { color: var(--ink-faint); font-size: 12px; margin-bottom: 4px; }
+  .wa-why { color: var(--ink-soft); font-size: 12.5px; margin-top: 6px; font-style: italic; }
+
+  /* ---- collapsible ---- */
+  .collapse-toggle { border: 0; background: none; font: 700 11px inherit; font-family: inherit;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint);
+    cursor: pointer; padding: 0; margin: 16px 0 6px; display: flex; align-items: center; gap: 6px; }
+  .collapse-toggle:hover { color: var(--ink); }
+  .collapse-toggle .arrow { transition: transform 0.15s; display: inline-block; }
+  .collapsible.open .collapse-toggle .arrow { transform: rotate(90deg); }
+  .collapse-body { display: none; }
+  .collapsible.open .collapse-body { display: block; }
+
+  .note { display: flex; gap: 8px; align-items: baseline; font-size: 13.5px; margin: 4px 0; }
+  .note-date { color: var(--ink-faint); font-size: 12px; white-space: nowrap; }
+  .note button { border: 0; background: none; color: var(--ink-faint); cursor: pointer; font-size: 12px; }
+  .note button:hover { color: var(--ink); }
+  .note-add { display: flex; gap: 8px; margin-top: 8px; }
+  .note-add input { flex: 1; border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font: inherit; }
+
+  button.primary { border: 0; background: var(--accent); color: #fff; font: 600 13px inherit;
+    font-family: inherit; padding: 7px 14px; border-radius: 6px; cursor: pointer; }
+  button.primary:disabled { opacity: 0.5; cursor: default; }
+  button.ghost { border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+    font: 600 13px inherit; font-family: inherit; padding: 7px 14px; border-radius: 6px; cursor: pointer; }
+  button.ghost:hover { background: var(--bg); }
+
+  /* ---- backlog ---- */
+  .backlog-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .backlog-bar .meta { color: var(--ink-faint); font-size: 13px; flex: 1; }
+  .ib-item { background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 10px; }
+  .ib-top { display: flex; gap: 10px; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; }
+  .ib-topic { font-weight: 650; font-size: 14px; }
+  .ib-phase { color: var(--ink-faint); font-size: 12px; }
+  .ib-meta { color: var(--ink-faint); font-size: 12px; }
+  .ib-text { white-space: pre-wrap; font-size: 14px; max-width: 800px; }
+  .ib-why { color: var(--ink-soft); font-size: 13px; margin-top: 6px; font-style: italic; }
+  .ib-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .empty { color: var(--ink-faint); text-align: center; padding: 60px 0; }
+  .bl-head { display: flex; align-items: baseline; gap: 12px; margin: 0 0 10px; }
+  .bl-title { font-weight: 650; font-size: 15px; }
+  .bl-sub { color: var(--green); font-size: 12.5px; flex: 1; }
+  .bl-head .ghost { padding: 5px 10px; font-size: 12px; }
+  .ib-goto { margin-left: auto; font-size: 12px; white-space: nowrap; }
+  .prio { font: 700 10px/1 inherit; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 4px 7px; border-radius: 999px; white-space: nowrap; }
+  .prio.prio-new { background: var(--green-soft); color: var(--green); border: 1px solid #bbf7d0; }
+  .prio.prio-weak { background: var(--red-soft); color: var(--red); border: 1px solid #fecaca; }
+  .prio.prio-untested { background: var(--amber-soft); color: var(--amber); border: 1px solid #fde68a; }
+  .proj-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 12px; }
+  .proj-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .proj-name { font-weight: 650; font-size: 15px; }
+  .proj-meta { color: var(--ink-faint); font-size: 12px; }
+
+  /* ---- context chips ---- */
+  .ctx-list { display: flex; flex-direction: column; gap: 4px; }
+  .ctx { display: flex; gap: 8px; align-items: baseline; font-size: 13px;
+    background: var(--amber-soft); border: 1px solid #fde68a; border-radius: 6px; padding: 6px 10px; }
+  .ctx.global { background: var(--accent-soft); border-color: #bfdbfe; }
+  .ctx-text { flex: 1; }
+  .ctx-scope { font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--ink-faint); }
+  .ctx button { border: 0; background: none; color: var(--ink-faint); cursor: pointer; font-size: 13px; line-height: 1; }
+  .ctx button:hover { color: var(--ink); }
+
+  /* ---- chat (shared bubbles) ---- */
+  .chat-log { display: flex; flex-direction: column; gap: 10px; }
+  .chat-empty { color: var(--ink-faint); font-size: 13px; text-align: center; padding: 14px 0; }
+  .msg { display: flex; }
+  .msg.user { justify-content: flex-end; }
+  .bubble { max-width: 82%; padding: 8px 12px; border-radius: 12px; font-size: 13.5px;
+    white-space: pre-wrap; line-height: 1.5; }
+  .msg.user .bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 3px; }
+  .msg.assistant .bubble { background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 3px; }
+  .chat-thinking { color: var(--ink-faint); font-style: italic; }
+
+  /* ---- right-docked tutor chat widget ---- */
+  #chat-widget {
+    position: fixed; top: 49px; right: 0; bottom: 0; width: var(--cw-width);
+    background: var(--surface); border-left: 1px solid var(--line); z-index: 25;
+    display: flex; flex-direction: column; transform: translateX(100%);
+    transition: transform 0.2s; box-shadow: -8px 0 24px rgba(0,0,0,0.05);
+  }
+  #chat-widget.open { transform: translateX(0); }
+  .cw-header { display: flex; align-items: center; gap: 8px; padding: 12px 14px;
+    border-bottom: 1px solid var(--line); }
+  .cw-title { font-weight: 650; font-size: 14px; flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cw-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-faint); }
+  .cw-collapse { border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+    cursor: pointer; border-radius: 6px; width: 28px; height: 28px; font-size: 14px; }
+  .cw-collapse:hover { background: var(--bg); }
+  .cw-context { padding: 10px 14px; border-bottom: 1px solid var(--line); max-height: 160px; overflow-y: auto; }
+  .cw-context .section-label { margin: 0 0 6px; }
+  .cw-log { flex: 1; overflow-y: auto; padding: 14px; background: var(--bg); }
+  .cw-input { border-top: 1px solid var(--line); padding: 10px 12px; }
+  .cw-input textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px;
+    padding: 8px 10px; font: inherit; resize: vertical; min-height: 46px; }
+  .cw-comment { width: 100%; border: 1px solid var(--line); border-radius: 6px;
+    padding: 6px 10px; font: inherit; font-size: 12.5px; margin-top: 6px; }
+  .cw-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .cw-actions .ghost, .cw-actions .primary { flex: 1; }
+  #chat-reopen { position: fixed; top: 120px; right: 0; z-index: 24; display: none;
+    writing-mode: vertical-rl; background: var(--accent); color: #fff; border: 0;
+    padding: 12px 6px; border-radius: 8px 0 0 8px; cursor: pointer; font: 600 12px inherit;
+    font-family: inherit; letter-spacing: 0.04em; }
+
+  /* ---- quiz ---- */
+  .quiz-intro { color: var(--ink-soft); font-size: 14px; max-width: 760px; margin: 0 0 14px; }
+  .quiz-pick { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .quiz-pick select { border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px;
+    font: inherit; background: var(--surface); min-width: 320px; }
+  .quiz-panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+  .quiz-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .quiz-head .t { font-weight: 650; flex: 1; }
+  .quiz-log { padding: 16px; max-height: 420px; overflow-y: auto; }
+  .quiz-input { border-top: 1px solid var(--line); padding: 12px 16px; }
+  .quiz-input textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px;
+    padding: 8px 10px; font: inherit; resize: vertical; min-height: 60px; }
+  .quiz-actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+  .quiz-actions .hint { color: var(--ink-faint); font-size: 12px; flex: 1; }
+  .grade { margin-top: 14px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 8px; padding: 14px 16px; }
+  .grade-top { display: flex; align-items: center; gap: 10px; }
+  .grade-score { font-size: 22px; font-weight: 700; }
+  .grade-rationale { color: var(--ink-soft); font-size: 14px; margin: 8px 0 0; }
+  .grade-gaps { margin: 8px 0 0; padding-left: 18px; color: var(--ink-soft); font-size: 13.5px; }
+  .strength-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+    border: 1px solid var(--line); border-radius: 6px; margin: 4px 0; background: var(--surface); cursor: pointer; }
+  .strength-row:hover { background: var(--bg); }
+  .strength-row .name { flex: 1; font-size: 14px; }
+  .strength-row .ph { color: var(--ink-faint); font-size: 12px; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px;
+    font-size: 13.5px; transition: transform 0.2s; z-index: 50; max-width: 520px; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Curriculum</h1>
+  <nav class="tabs">
+    <button class="tab active" data-view="curriculum">Curriculum</button>
+    <button class="tab" data-view="quiz">Quiz</button>
+    <button class="tab" data-view="backlog">Backlog<span class="badge zero" id="backlog-badge">0</span></button>
+    <button class="tab" data-view="projects">Projects</button>
+    <button class="tab" data-view="preferences">Preferences<span class="badge zero" id="prefs-badge">0</span></button>
+  </nav>
+  <span class="spacer"></span>
+  <input type="search" id="search" placeholder="Filter topics" autocomplete="off">
+  <a class="weekly-link" href="/weekly">Weekly</a>
+</header>
+
+<main id="main"></main>
+
+<button id="chat-reopen">Tutor chat</button>
+<aside id="chat-widget">
+  <div class="cw-header">
+    <div style="flex:1; min-width:0">
+      <div class="cw-eyebrow">Tutor chat</div>
+      <div class="cw-title"></div>
+    </div>
+    <button class="cw-collapse" title="Collapse">&rsaquo;</button>
+  </div>
+  <div class="cw-context"></div>
+  <div class="cw-log"></div>
+  <div class="cw-input">
+    <textarea placeholder="Tell me how to change this explanation, ask about an example, or go deeper…"></textarea>
+    <input class="cw-comment" type="text" placeholder="Commit only… (optional; blank = everything in the chat)">
+    <div class="cw-actions">
+      <button class="ghost cw-send">Send</button>
+      <button class="primary cw-commit">Send to curriculum</button>
+    </div>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const state = {
+  view: "curriculum",
+  curriculum: null,
+  notes: {},
+  inbox: { items: [], last_crawl_at: null },
+  sources: { projects: [] },
+  openTopics: new Set(),
+  filter: "",
+  chat: { topicId: null, open: false, history: [] },
+  quiz: { topicId: null, history: [], lastGrade: null, busy: false },
+};
+
+const main = document.getElementById("main");
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// Lightweight markdown -> safe HTML (escapes first). Handles **bold**, `code`,
+// *em*, "- " / "* " bullets, "1." ordered lists, paragraphs. Everything stored
+// in the app (lessons, chat, examples) is markdown; this renders it.
+function renderInline(text) {
+  let s = esc(text);
+  s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+  s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>");
+  return s;
+}
+function renderMd(md) {
+  if (md == null || md === "") return "";
+  const lines = String(md).replace(/\r/g, "").split("\n");
+  const isItem = (l) => /^\s*([-*]|\d+\.)\s+/.test(l);
+  const indentOf = (l) => l.match(/^(\s*)/)[1].replace(/\t/g, "  ").length;
+  let i = 0;
+  function renderList() {
+    const base = indentOf(lines[i]);
+    const ordered = /^\s*\d+\.\s/.test(lines[i]);
+    let html = ordered ? "<ol>" : "<ul>";
+    while (i < lines.length) {
+      if (!lines[i].trim()) { i++; continue; }
+      if (!isItem(lines[i])) break;
+      const ind = indentOf(lines[i]);
+      if (ind < base) break;
+      if (ind > base) { const nested = renderList(); html = html.replace(/<\/li>$/, nested + "</li>"); continue; }
+      html += "<li>" + renderInline(lines[i].replace(/^\s*(?:[-*]|\d+\.)\s+/, "")) + "</li>";
+      i++;
+    }
+    return html + (ordered ? "</ol>" : "</ul>");
+  }
+  let out = "";
+  while (i < lines.length) {
+    if (!lines[i].trim()) { i++; continue; }
+    if (isItem(lines[i])) { out += renderList(); }
+    else {
+      const para = [];
+      while (i < lines.length && lines[i].trim() && !isItem(lines[i])) { para.push(renderInline(lines[i])); i++; }
+      out += "<p>" + para.join("<br>") + "</p>";
+    }
+  }
+  return out;
+}
+
+async function api(path, opts) {
+  const res = await fetch(path, opts ? {
+    method: opts.method || "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(opts.body || {}),
+  } : undefined);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+function fmtViews(n) {
+  if (n == null) return "";
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M views";
+  if (n >= 1e3) return Math.round(n / 1e3) + "K views";
+  return n + " views";
+}
+
+function strengthLevel(s) {
+  if (s == null) return null;
+  return s >= 85 ? "strong" : s >= 65 ? "solid" : s >= 40 ? "developing" : "weak";
+}
+
+function findTopic(id) {
+  if (!state.curriculum) return null;
+  for (const p of state.curriculum.phases) {
+    const t = p.topics.find((x) => x.id === id);
+    if (t) return { phase: p, topic: t };
+  }
+  return null;
+}
+
+function pendingCount() { return state.inbox.items.filter((i) => i.status === "pending").length; }
+
+function updateBadge() {
+  const b = document.getElementById("backlog-badge");
+  const n = pendingCount();
+  b.textContent = n; b.classList.toggle("zero", n === 0);
+  const pb = document.getElementById("prefs-badge");
+  const g = (state.curriculum && state.curriculum.global_context) || [];
+  pb.textContent = g.length; pb.classList.toggle("zero", g.length === 0);
+}
+
+// ---------------- curriculum view ----------------
+
+function renderCurriculum() {
+  if (!state.curriculum) { main.innerHTML = '<p class="empty">Loading…</p>'; return; }
+  const q = state.filter.trim().toLowerCase();
+  const frag = document.createDocumentFragment();
+  for (const phase of state.curriculum.phases) {
+    const topics = phase.topics.filter((t) => !q || (t.title + " " + t.desc).toLowerCase().includes(q));
+    if (!topics.length) continue;
+    const ph = document.createElement("section");
+    ph.className = "phase";
+    ph.innerHTML = `<div class="phase-head"><span class="phase-num">${phase.num}</span><h2>${esc(phase.title)}</h2></div>
+      <p class="phase-desc">${esc(phase.description)}</p>`;
+    for (const t of topics) ph.appendChild(topicCard(t));
+    frag.appendChild(ph);
+  }
+  main.innerHTML = "";
+  main.appendChild(frag);
+  if (!main.children.length) main.innerHTML = '<p class="empty">No topics match.</p>';
+}
+
+function topicCard(t) {
+  const el = document.createElement("div");
+  el.className = "topic" + (state.openTopics.has(t.id) ? " open" : "");
+  el.dataset.id = t.id;
+
+  const notes = state.notes[t.id] || [];
+  const bits = [];
+  if (t.examples.length) bits.push(t.examples.length + " ex");
+  if ((t.context || []).length) bits.push(t.context.length + " ctx");
+  if (notes.length) bits.push(notes.length + " notes");
+  const lvl = strengthLevel(t.strength);
+  const strengthChip = lvl ? `<span class="strength ${lvl}">${lvl} ${t.strength}</span>` : "";
+
+  const row = document.createElement("div");
+  row.className = "topic-row";
+  row.innerHTML = `
+    <span class="topic-title">${esc(t.title)}</span>
+    <span class="topic-desc">${esc(t.desc)}</span>
+    <span class="counts">${bits.join(" · ")}</span>
+    ${strengthChip}
+    <button class="pill ${t.status}" title="Click to cycle status">${t.status}</button>
+    <button class="chat-btn" title="Open tutor chat">Chat</button>`;
+  row.querySelector(".pill").addEventListener("click", (e) => { e.stopPropagation(); cycleStatus(t); });
+  row.querySelector(".chat-btn").addEventListener("click", (e) => { e.stopPropagation(); openChat(t.id); });
+  row.addEventListener("click", () => {
+    if (state.openTopics.has(t.id)) state.openTopics.delete(t.id);
+    else state.openTopics.add(t.id);
+    el.classList.toggle("open");
+    const body = el.querySelector(".topic-body");
+    if (el.classList.contains("open") && !body.dataset.filled) fillTopicBody(body, t);
+  });
+  el.appendChild(row);
+
+  const body = document.createElement("div");
+  body.className = "topic-body";
+  el.appendChild(body);
+  if (state.openTopics.has(t.id)) fillTopicBody(body, t);
+  return el;
+}
+
+function fillTopicBody(body, t) {
+  body.dataset.filled = "1";
+  let html = "";
+
+  if (t.video) {
+    html += `<div class="section-label">Video</div>
+      <div class="video-line">
+        <a href="${esc(t.video.url)}" target="_blank" rel="noopener">${esc(t.video.title)}</a>
+        <span class="video-meta">${esc(t.video.channel || "")} · ${esc(t.video.duration || "")} · ${fmtViews(t.video.views)}</span>
+      </div>`;
+  }
+
+  if (t.lesson) html += `<div class="lesson-wrap" data-lesson></div>`;
+
+  if (t.examples.length) {
+    let ex = "";
+    for (const e of t.examples) {
+      const tag = e.project ? `project ${esc(e.project)}` : esc(e.from || e.source || "");
+      ex += `<div class="wa-example"><div class="wa-meta">${tag} · ${esc((e.ts || "").slice(0, 10))}</div>
+        <div>${renderMd(e.text)}</div>${e.why ? `<div class="wa-why">${esc(e.why)}</div>` : ""}</div>`;
+    }
+    const open = t.examples.length <= 2;
+    html += `<div class="collapsible ${open ? "open" : ""}" data-collapsible>
+      <button class="collapse-toggle"><span class="arrow">&rsaquo;</span> Examples (${t.examples.length})</button>
+      <div class="collapse-body">${ex}</div></div>`;
+  }
+
+  if (t.history.length) {
+    html += `<div class="section-label">History</div>`;
+    for (const h of t.history) {
+      const where = [h.project, h.file].filter(Boolean).join(" · ");
+      html += `<div class="note"><span class="note-date">${esc(h.date || "")} ${esc(h.action || "")}</span>
+        <span>${where ? "<strong>" + esc(where) + "</strong> — " : ""}${esc(h.note || "")}</span></div>`;
+    }
+  }
+
+  html += `<div class="section-label">Notes</div><div class="notes-list"></div>
+    <div class="note-add"><input type="text" placeholder="Add a note…"><button class="ghost">Add</button></div>`;
+
+  body.innerHTML = html;
+  wireCollapsibles(body);
+  const lessonEl = body.querySelector("[data-lesson]");
+  if (lessonEl) renderLessonView(lessonEl, t);
+
+  const list = body.querySelector(".notes-list");
+  renderNotes(list, t);
+  const input = body.querySelector(".note-add input");
+  const addNote = async () => {
+    const content = input.value.trim();
+    if (!content) return;
+    try {
+      await api("/api/note", { body: { topic_id: t.id, content, topic_title: t.title } });
+      input.value = "";
+      state.notes = (await api("/api/notes", null)) ?? state.notes;
+      renderNotes(list, t);
+      toast("Note saved");
+    } catch (e) { toast(e.message); }
+  };
+  body.querySelector(".note-add button").addEventListener("click", addNote);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") addNote(); });
+}
+
+function wireCollapsibles(root) {
+  for (const c of root.querySelectorAll("[data-collapsible]")) {
+    c.querySelector(".collapse-toggle").addEventListener("click", () => c.classList.toggle("open"));
+  }
+}
+
+function renderLessonView(el, t) {
+  if (!t.lesson) { el.innerHTML = ""; return; }
+  const l = t.lesson;
+  let h = `<div class="lesson-head"><span class="section-label">Lesson</span>
+    <button class="mini-btn" data-edit>Edit</button>
+    ${t.undo_count ? `<button class="mini-btn" data-undo>Undo last change</button>` : ""}</div>`;
+  h += `<div class="lesson-def">${renderMd(l.def)}</div>`;
+  if (l.example && l.example.code) {
+    h += `<pre>${esc(l.example.code)}</pre><div class="example-purpose">${renderInline(l.example.purpose || "")}</div>`;
+  }
+  if (l.fp && l.fp.length) {
+    h += `<div class="section-label">First principles</div>`;
+    for (const p of l.fp) h += `<div class="fp"><div class="fp-q">${renderInline(p.q)}</div><div class="fp-a">${renderMd(p.a)}</div></div>`;
+  }
+  el.innerHTML = h;
+  const eb = el.querySelector("[data-edit]");
+  if (eb) eb.addEventListener("click", () => renderLessonEdit(el, t));
+  const ub = el.querySelector("[data-undo]");
+  if (ub) ub.addEventListener("click", () => undoTopic(t));
+}
+
+function renderLessonEdit(el, t) {
+  const l = t.lesson || { def: "", example: null, fp: [] };
+  el.innerHTML = `
+    <div class="lesson-head"><span class="section-label">Edit lesson — markdown</span></div>
+    <textarea class="edit-def" rows="6">${esc(l.def || "")}</textarea>
+    <div class="section-label">Example code (blank removes it)</div>
+    <textarea class="edit-code" rows="6">${esc(l.example?.code || "")}</textarea>
+    <input class="edit-purpose" type="text" placeholder="example caption" value="${esc(l.example?.purpose || "")}">
+    <div class="section-label">First principles</div>
+    <div class="edit-fp"></div>
+    <button class="mini-btn" data-addfp>+ add Q/A</button>
+    <div class="edit-actions"><button class="primary" data-save>Save</button><button class="ghost" data-cancel>Cancel</button></div>`;
+  const fpWrap = el.querySelector(".edit-fp");
+  const addFpRow = (q = "", a = "") => {
+    const row = document.createElement("div");
+    row.className = "fp-edit-row";
+    row.innerHTML = `<input class="fp-q-in" placeholder="question" value="${esc(q)}">
+      <textarea class="fp-a-in" rows="2" placeholder="answer">${esc(a)}</textarea>
+      <button class="mini-btn" data-del title="Remove">&times;</button>`;
+    row.querySelector("[data-del]").addEventListener("click", () => row.remove());
+    fpWrap.appendChild(row);
+  };
+  for (const p of l.fp || []) addFpRow(p.q, p.a);
+  el.querySelector("[data-addfp]").addEventListener("click", () => addFpRow());
+  el.querySelector("[data-cancel]").addEventListener("click", () => renderLessonView(el, t));
+  el.querySelector("[data-save]").addEventListener("click", async () => {
+    const code = el.querySelector(".edit-code").value;
+    const lesson = {
+      def: el.querySelector(".edit-def").value,
+      example: code.trim() ? { code, purpose: el.querySelector(".edit-purpose").value } : null,
+      fp: Array.from(fpWrap.querySelectorAll(".fp-edit-row"))
+        .map((r) => ({ q: r.querySelector(".fp-q-in").value, a: r.querySelector(".fp-a-in").value }))
+        .filter((p) => p.q || p.a),
+    };
+    try {
+      await api("/api/topic/lesson", { body: { topic_id: t.id, lesson } });
+      await reloadData();
+      render();
+      toast("Lesson saved");
+    } catch (e) { toast(e.message); }
+  });
+}
+
+async function undoTopic(t) {
+  try {
+    const r = await api("/api/topic/undo", { body: { topic_id: t.id } });
+    await reloadData();
+    render();
+    toast("Undone: " + (r.undone || "last change"));
+  } catch (e) { toast(e.message); }
+}
+
+function renderNotes(list, t) {
+  const notes = state.notes[t.id] || [];
+  list.innerHTML = notes.length ? "" : '<div class="note"><span style="color:var(--ink-faint)">None yet.</span></div>';
+  for (const n of notes) {
+    const div = document.createElement("div");
+    div.className = "note";
+    div.innerHTML = `<span class="note-date">${esc(n.date)}</span><span>${esc(n.content)}</span><button>delete</button>`;
+    div.querySelector("button").addEventListener("click", async () => {
+      try {
+        await api("/api/note", { method: "DELETE", body: { topic_id: t.id, note_id: n.id } });
+        state.notes[t.id] = (state.notes[t.id] || []).filter((x) => x.id !== n.id);
+        renderNotes(list, t);
+      } catch (e) { toast(e.message); }
+    });
+    list.appendChild(div);
+  }
+}
+
+async function cycleStatus(t) {
+  const order = ["untouched", "introduced", "mastered"];
+  const next = order[(order.indexOf(t.status) + 1) % order.length];
+  try {
+    await api("/api/topic/status", { body: { topic_id: t.id, status: next } });
+    t.status = next;
+    render();
+  } catch (e) { toast(e.message); }
+}
+
+// ---------------- tutor chat widget ----------------
+
+function openChat(topicId) {
+  state.chat.topicId = topicId;
+  state.chat.open = true;
+  document.body.classList.add("cw-open");
+  renderChatWidget();
+  loadChatHistory();
+}
+
+function closeChat() {
+  state.chat.open = false;
+  document.body.classList.remove("cw-open");
+  renderChatWidget();
+}
+
+async function loadChatHistory() {
+  const id = state.chat.topicId;
+  try { const d = await api(`/api/chat?topic_id=${encodeURIComponent(id)}`, null); state.chat.history = d.history || []; }
+  catch { state.chat.history = []; }
+  renderChatLog();
+}
+
+function renderChatWidget() {
+  const w = document.getElementById("chat-widget");
+  const reopen = document.getElementById("chat-reopen");
+  const hit = state.chat.topicId ? findTopic(state.chat.topicId) : null;
+  if (!hit) { w.classList.remove("open"); reopen.style.display = "none"; document.body.classList.remove("cw-open"); return; }
+  w.querySelector(".cw-title").textContent = hit.topic.title;
+  w.classList.toggle("open", state.chat.open);
+  reopen.style.display = state.chat.open ? "none" : "block";
+  document.body.classList.toggle("cw-open", state.chat.open);
+  renderChatContext(hit.topic);
+  renderChatLog();
+}
+
+function renderChatContext(t) {
+  const box = document.querySelector("#chat-widget .cw-context");
+  const ctx = t.context || [];
+  let html = `<div class="section-label">Your instructions for this topic</div>`;
+  if (!ctx.length) {
+    html += `<div style="color:var(--ink-faint);font-size:12.5px">None yet — commit a chat to save them.</div>`;
+    box.innerHTML = html;
+    return;
+  }
+  html += `<div class="ctx-list"></div>`;
+  box.innerHTML = html;
+  const list = box.querySelector(".ctx-list");
+  for (const n of ctx) {
+    const div = document.createElement("div");
+    div.className = "ctx";
+    div.innerHTML = `<span class="ctx-text">${esc(n.text)}</span><button title="Remove">&times;</button>`;
+    div.querySelector("button").addEventListener("click", async () => {
+      try {
+        await api("/api/context", { method: "DELETE", body: { topic_id: t.id, note_id: n.id } });
+        t.context = (t.context || []).filter((x) => x.id !== n.id);
+        renderChatContext(t);
+        toast("Removed");
+      } catch (e) { toast(e.message); }
+    });
+    list.appendChild(div);
+  }
+}
+
+function renderChatLog() {
+  const log = document.querySelector("#chat-widget .cw-log");
+  const h = state.chat.history;
+  if (!h.length) { log.innerHTML = '<div class="chat-empty">No messages yet. Ask about this topic, an example, or tell me what to change.</div>'; return; }
+  log.innerHTML = "";
+  for (const m of h) {
+    const div = document.createElement("div");
+    div.className = "msg " + (m.role === "user" ? "user" : "assistant");
+    div.innerHTML = `<div class="bubble">${renderMd(m.content)}</div>`;
+    log.appendChild(div);
+  }
+  log.scrollTop = log.scrollHeight;
+}
+
+async function sendChat() {
+  const w = document.getElementById("chat-widget");
+  const textarea = w.querySelector(".cw-input textarea");
+  const sendBtn = w.querySelector(".cw-send");
+  const commitBtn = w.querySelector(".cw-commit");
+  const msg = textarea.value.trim();
+  if (!msg) return;
+  const id = state.chat.topicId;
+  textarea.value = "";
+  state.chat.history.push({ role: "user", content: msg });
+  renderChatLog();
+  const log = w.querySelector(".cw-log");
+  const thinking = document.createElement("div");
+  thinking.className = "msg assistant";
+  thinking.innerHTML = '<div class="bubble chat-thinking">thinking…</div>';
+  log.appendChild(thinking); log.scrollTop = log.scrollHeight;
+  sendBtn.disabled = true; commitBtn.disabled = true;
+  try {
+    const d = await api("/api/chat", { body: { topic_id: id, message: msg } });
+    state.chat.history = d.history;
+  } catch (e) { toast(e.message); state.chat.history.push({ role: "assistant", content: "[error: " + e.message + "]" }); }
+  sendBtn.disabled = false; commitBtn.disabled = false;
+  renderChatLog();
+}
+
+async function commitChat() {
+  const w = document.getElementById("chat-widget");
+  const commitBtn = w.querySelector(".cw-commit");
+  const comment = w.querySelector(".cw-comment");
+  if (!state.chat.history.length) { toast("Nothing to commit yet"); return; }
+  const id = state.chat.topicId;
+  commitBtn.disabled = true; commitBtn.textContent = "Committing…";
+  try {
+    const r = await api("/api/chat/commit", { body: { topic_id: id, instruction: comment.value.trim() } });
+    const parts = [];
+    if (r.lesson_changed) parts.push("explanation updated");
+    if (r.topic_notes) parts.push(`${r.topic_notes} topic instruction${r.topic_notes > 1 ? "s" : ""}`);
+    if (r.global_notes) parts.push(`${r.global_notes} global instruction${r.global_notes > 1 ? "s" : ""}`);
+    toast(parts.length ? "Committed: " + parts.join(", ") : (r.summary || "Committed"));
+    comment.value = "";
+    await reloadData();
+    render();
+    renderChatWidget();
+  } catch (e) { toast(e.message); }
+  commitBtn.disabled = false; commitBtn.textContent = "Send to curriculum";
+}
+
+// ---------------- backlog view ----------------
+
+// Priority of a backlog item by its target topic: new (untouched) and weak
+// (low quiz strength) topics are surfaced first during review.
+function topicPriority(item) {
+  const hit = findTopic(item.topic_id);
+  if (!hit) return { rank: 3, label: "", cls: "" };
+  const t = hit.topic;
+  if (t.status === "untouched") return { rank: 0, label: "new topic", cls: "prio-new" };
+  if (t.strength != null && t.strength < 65) return { rank: 1, label: `weak · ${t.strength}`, cls: "prio-weak" };
+  if (t.strength == null) return { rank: 2, label: "untested", cls: "prio-untested" };
+  return { rank: 3, label: "", cls: "" };
+}
+
+function backlogCard(item, withPrio) {
+  const prio = topicPriority(item);
+  const el = document.createElement("div");
+  el.className = "ib-item";
+  const flag = withPrio && prio.label ? `<span class="prio ${prio.cls}">${prio.label}</span>` : "";
+  const when = item.ts ? " · " + esc((item.ts || "").slice(0, 16).replace("T", " ")) : "";
+  el.innerHTML = `
+    <div class="ib-top">
+      <span class="ib-topic">${esc(item.topic_title)}</span>
+      ${flag}
+      <span class="ib-phase">${esc(item.phase_title)}</span>
+      <span class="ib-meta">${esc(item.from)}${when}</span>
+      <a class="ib-goto" href="#">go to topic &rarr;</a>
+    </div>
+    <div class="ib-text">${esc(item.text)}</div>
+    ${item.why ? `<div class="ib-why">${esc(item.why)}</div>` : ""}
+    <div class="ib-actions">
+      <button class="primary" data-act="approve">Approve as example</button>
+      <button class="ghost" data-act="dismiss">Dismiss</button>
+    </div>`;
+  el.querySelector(".ib-goto").addEventListener("click", (e) => { e.preventDefault(); goToTopic(item.topic_id); });
+  for (const btn of el.querySelectorAll("[data-act]")) btn.addEventListener("click", () => inboxAction([item.id], btn.dataset.act));
+  return el;
+}
+
+function renderBacklog() {
+  const pending = state.inbox.items.filter((i) => i.status === "pending");
+  const wa = pending.filter((i) => i.kind !== "project");
+  const projItems = pending.filter((i) => i.kind === "project");
+  const byProject = {};
+  for (const i of projItems) (byProject[i.project] = byProject[i.project] || []).push(i);
+  const last = state.inbox.last_crawl_at ? new Date(state.inbox.last_crawl_at).toLocaleString() : "never";
+
+  main.innerHTML = `
+    <div class="backlog-bar">
+      <span class="meta">${pending.length} pending (${wa.length} from chats, ${projItems.length} from projects) · last scrape: ${esc(last)}</span>
+      <button class="primary" id="crawl-now">Scrape now</button>
+    </div>
+    <div id="bl-root"></div>`;
+  const root = document.getElementById("bl-root");
+
+  const waSec = document.createElement("section");
+  waSec.innerHTML = `<div class="bl-head"><span class="bl-title">From CDTM Eng chat (${wa.length})</span>
+    ${wa.length ? `<button class="ghost" data-all="approve">Approve all</button><button class="ghost" data-all="dismiss">Dismiss all</button>` : ""}</div>`;
+  if (!pending.length) waSec.innerHTML += '<p class="empty">Backlog clear. CDTM Eng messages land here from the daily scrape; run /sde on a project to add project items.</p>';
+  for (const it of wa) waSec.appendChild(backlogCard(it, false));
+  for (const b of waSec.querySelectorAll("[data-all]")) b.addEventListener("click", () => inboxAction(wa.map((i) => i.id), b.dataset.all));
+  root.appendChild(waSec);
+
+  for (const name of Object.keys(byProject).sort()) {
+    const items = byProject[name].slice().sort((a, b) => topicPriority(a).rank - topicPriority(b).rank);
+    const flagged = items.filter((i) => topicPriority(i).rank <= 1).length;
+    const sec = document.createElement("section");
+    sec.style.marginTop = "24px";
+    sec.innerHTML = `<div class="bl-head"><span class="bl-title">Project: ${esc(name)} (${items.length})</span>
+      ${flagged ? `<span class="bl-sub">${flagged} on new / weak topics — suggested first</span>` : '<span class="bl-sub"></span>'}
+      <button class="ghost" data-pall="approve">Approve all</button><button class="ghost" data-pall="dismiss">Dismiss all</button></div>`;
+    for (const it of items) sec.appendChild(backlogCard(it, true));
+    for (const b of sec.querySelectorAll("[data-pall]")) b.addEventListener("click", () => inboxAction(items.map((i) => i.id), b.dataset.pall));
+    root.appendChild(sec);
+  }
+
+  document.getElementById("crawl-now").addEventListener("click", crawlNow);
+}
+
+function renderProjects() {
+  const projects = (state.sources && state.sources.projects) || [];
+  if (!projects.length) {
+    main.innerHTML = `<p class="quiz-intro">No projects sourced yet. While building a tool with Claude Code, run
+      <strong>/sde</strong> to mine its code + build session into the backlog. Approved items appear here grouped by
+      project, linked to the topics they enrich.</p>`;
+    return;
+  }
+  main.innerHTML = `<p class="quiz-intro">Your own tools as curriculum sources — each lists the topics it has enriched
+    with approved examples (weakest first). Click a topic to open it. Pending items wait in the Backlog under the
+    project's section.</p><div id="proj-root"></div>`;
+  const root = document.getElementById("proj-root");
+  for (const p of projects) {
+    const sec = document.createElement("section");
+    sec.className = "proj-card";
+    const when = p.last_ingest_at ? new Date(p.last_ingest_at).toLocaleDateString() : "";
+    const topics = (p.topics || []).slice().sort((a, b) => (a.strength ?? 999) - (b.strength ?? 999));
+    sec.innerHTML = `<div class="proj-head"><span class="proj-name">${esc(p.name)}</span>
+      <span class="proj-meta">${topics.length} topics · ${p.code_files || 0} files · ${p.pending || 0} pending · ingested ${esc(when)}</span></div>`;
+    const list = document.createElement("div");
+    if (!topics.length) list.innerHTML = `<div style="color:var(--ink-faint);font-size:13px">No approved examples yet — review its items in the Backlog.</div>`;
+    for (const t of topics) {
+      const lvl = strengthLevel(t.strength);
+      const row = document.createElement("div");
+      row.className = "strength-row";
+      row.innerHTML = `<span class="name">${esc(t.title)}</span><span class="ph">${esc(t.phase_title)}</span>
+        <span class="counts">${t.count} ex</span>
+        ${lvl ? `<span class="strength ${lvl}">${lvl} ${t.strength}</span>` : `<span class="strength" style="color:var(--ink-faint)">untested</span>`}
+        <button class="chat-btn">Open &rarr;</button>`;
+      row.querySelector("button").addEventListener("click", (e) => { e.stopPropagation(); goToTopic(t.id); });
+      row.addEventListener("click", () => goToTopic(t.id));
+      list.appendChild(row);
+    }
+    sec.appendChild(list);
+    root.appendChild(sec);
+  }
+}
+
+async function inboxAction(ids, action) {
+  try {
+    const r = await api("/api/inbox/action", { body: { ids, action } });
+    toast(`${r.changed} ${action === "approve" ? "approved" : "dismissed"}`);
+    await reloadData();
+    render();
+  } catch (e) { toast(e.message); }
+}
+
+async function crawlNow() {
+  const btn = document.getElementById("crawl-now");
+  btn.disabled = true; btn.textContent = "Scraping…";
+  try { await api("/api/crawl", { body: {} }); await reloadData(); render(); toast("Scrape done"); }
+  catch (e) { toast(e.message); btn.disabled = false; btn.textContent = "Scrape now"; }
+}
+
+// ---------------- quiz view ----------------
+
+function quizTopicsWeakestFirst() {
+  const all = [];
+  for (const p of state.curriculum.phases) for (const t of p.topics) all.push({ t, phase: p });
+  const rank = (x) => x.t.strength == null ? -1 : x.t.strength; // untested (-1) first
+  return all.sort((a, b) => rank(a) - rank(b));
+}
+
+function renderQuiz() {
+  if (!state.curriculum) { main.innerHTML = '<p class="empty">Loading…</p>'; return; }
+  const ranked = quizTopicsWeakestFirst();
+  const options = ranked.map(({ t, phase }) => {
+    const lvl = strengthLevel(t.strength);
+    const tag = lvl ? ` — ${lvl} ${t.strength}` : " — untested";
+    return `<option value="${t.id}" ${t.id === state.quiz.topicId ? "selected" : ""}>${esc(t.title)}${tag}  ·  ${esc(phase.title)}</option>`;
+  }).join("");
+
+  main.innerHTML = `
+    <p class="quiz-intro">Open-ended test. Pick a topic (weakest / untested first), answer in your own words,
+    ask for hints if you need them. I grade understanding from the whole conversation — fewer hints and
+    deeper reasoning score higher.</p>
+    <div class="quiz-pick">
+      <select id="quiz-topic">${options}</select>
+      <button class="primary" id="quiz-start">Start new test</button>
+      <button class="ghost" id="quiz-resume">Resume</button>
+    </div>
+    <div id="quiz-area"></div>
+    <div id="quiz-tested"></div>`;
+
+  document.getElementById("quiz-topic").addEventListener("change", (e) => {
+    state.quiz.topicId = e.target.value;
+    state.quiz.history = []; state.quiz.lastGrade = null;
+    renderQuizArea();
+  });
+  document.getElementById("quiz-start").addEventListener("click", quizStart);
+  document.getElementById("quiz-resume").addEventListener("click", quizResume);
+
+  if (!state.quiz.topicId) state.quiz.topicId = ranked[0]?.t.id || null;
+  renderQuizArea();
+  renderTested();
+}
+
+function renderTested() {
+  const box = document.getElementById("quiz-tested");
+  if (!box) return;
+  const tested = [];
+  for (const p of state.curriculum.phases) for (const t of p.topics) if (t.strength != null) tested.push({ t, phase: p });
+  tested.sort((a, b) => a.t.strength - b.t.strength);
+  if (!tested.length) { box.innerHTML = ""; return; }
+  let html = `<div class="section-label" style="margin-top:24px">Your strengths (${tested.length} tested)</div>`;
+  box.innerHTML = html + '<div id="tested-list"></div>';
+  const list = document.getElementById("tested-list");
+  for (const { t, phase } of tested) {
+    const lvl = strengthLevel(t.strength);
+    const row = document.createElement("div");
+    row.className = "strength-row";
+    row.innerHTML = `<span class="name">${esc(t.title)}</span><span class="ph">${esc(phase.title)}</span>
+      <span class="strength ${lvl}">${lvl} ${t.strength}</span>`;
+    row.addEventListener("click", () => {
+      state.quiz.topicId = t.id; state.quiz.history = []; state.quiz.lastGrade = null;
+      renderQuiz();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    list.appendChild(row);
+  }
+}
+
+function renderQuizArea() {
+  const area = document.getElementById("quiz-area");
+  if (!area) return;
+  const hit = state.quiz.topicId ? findTopic(state.quiz.topicId) : null;
+  if (!hit) { area.innerHTML = '<p class="empty">Pick a topic to begin.</p>'; return; }
+
+  area.innerHTML = `
+    <div class="quiz-panel">
+      <div class="quiz-head"><span class="t">${esc(hit.topic.title)}</span>
+        <span class="ph" style="color:var(--ink-faint);font-size:12px">${esc(hit.phase.title)}</span></div>
+      <div class="quiz-log" id="quiz-log"></div>
+      <div class="quiz-input">
+        <textarea id="quiz-text" placeholder="Answer in your own words… (or ask for a hint)"></textarea>
+        <div class="quiz-actions">
+          <span class="hint">Enter sends · Shift+Enter = newline</span>
+          <button class="ghost" id="quiz-send">Send</button>
+          <button class="primary" id="quiz-grade">Grade me</button>
+        </div>
+      </div>
+    </div>
+    <div id="quiz-grade-box"></div>`;
+
+  renderQuizLog();
+  if (state.quiz.lastGrade) renderGrade(state.quiz.lastGrade);
+
+  const text = document.getElementById("quiz-text");
+  document.getElementById("quiz-send").addEventListener("click", quizSend);
+  document.getElementById("quiz-grade").addEventListener("click", quizGradeNow);
+  text.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); quizSend(); } });
+}
+
+function renderQuizLog() {
+  const log = document.getElementById("quiz-log");
+  if (!log) return;
+  const h = state.quiz.history;
+  if (!h.length) { log.innerHTML = '<div class="chat-empty">Press “Start new test” for a question, or “Resume” if you had one going.</div>'; return; }
+  log.innerHTML = "";
+  for (const m of h) {
+    const div = document.createElement("div");
+    div.className = "msg " + (m.role === "user" ? "user" : "assistant");
+    div.innerHTML = `<div class="bubble">${renderMd(m.content)}</div>`;
+    log.appendChild(div);
+  }
+  log.scrollTop = log.scrollHeight;
+}
+
+async function quizStart() {
+  if (!state.quiz.topicId) return;
+  const btn = document.getElementById("quiz-start");
+  btn.disabled = true; btn.textContent = "…";
+  state.quiz.lastGrade = null;
+  try {
+    const d = await api("/api/quiz/start", { body: { topic_id: state.quiz.topicId } });
+    state.quiz.history = d.history;
+    renderQuizArea();
+  } catch (e) { toast(e.message); }
+  btn.disabled = false; btn.textContent = "Start new test";
+}
+
+async function quizResume() {
+  if (!state.quiz.topicId) return;
+  try {
+    const d = await api(`/api/quiz?topic_id=${encodeURIComponent(state.quiz.topicId)}`, null);
+    state.quiz.history = d.history || [];
+    if (!state.quiz.history.length) toast("No test in progress — start a new one");
+    renderQuizArea();
+  } catch (e) { toast(e.message); }
+}
+
+async function quizSend() {
+  const text = document.getElementById("quiz-text");
+  const msg = text.value.trim();
+  if (!msg) return;
+  if (!state.quiz.history.length) { toast('Press "Start new test" first'); return; }
+  text.value = "";
+  state.quiz.history.push({ role: "user", content: msg });
+  renderQuizLog();
+  const log = document.getElementById("quiz-log");
+  const thinking = document.createElement("div");
+  thinking.className = "msg assistant";
+  thinking.innerHTML = '<div class="bubble chat-thinking">…</div>';
+  log.appendChild(thinking); log.scrollTop = log.scrollHeight;
+  try {
+    const d = await api("/api/quiz/message", { body: { topic_id: state.quiz.topicId, message: msg } });
+    state.quiz.history = d.history;
+  } catch (e) { toast(e.message); }
+  renderQuizLog();
+}
+
+async function quizGradeNow() {
+  if (state.quiz.history.filter((m) => m.role === "user").length === 0) { toast("Answer at least once first"); return; }
+  const btn = document.getElementById("quiz-grade");
+  btn.disabled = true; btn.textContent = "Grading…";
+  try {
+    const g = await api("/api/quiz/grade", { body: { topic_id: state.quiz.topicId } });
+    state.quiz.lastGrade = g;
+    await reloadData();
+    renderGrade(g);
+    renderTested();
+    toast(`Scored ${g.score} (${g.level})`);
+  } catch (e) { toast(e.message); }
+  btn.disabled = false; btn.textContent = "Grade me";
+}
+
+function renderGrade(g) {
+  const box = document.getElementById("quiz-grade-box");
+  if (!box) return;
+  const lvl = strengthLevel(g.score);
+  box.innerHTML = `
+    <div class="grade">
+      <div class="grade-top">
+        <span class="grade-score">${g.score}</span>
+        <span class="strength ${lvl}">${g.level}</span>
+        <span style="color:var(--ink-faint);font-size:13px">${g.hints_used} hint${g.hints_used === 1 ? "" : "s"} used</span>
+      </div>
+      <p class="grade-rationale">${esc(g.rationale)}</p>
+      ${g.gaps && g.gaps.length ? `<ul class="grade-gaps">${g.gaps.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+    </div>`;
+}
+
+// ---------------- preferences view ----------------
+
+function renderPreferences() {
+  const g = (state.curriculum && state.curriculum.global_context) || [];
+  main.innerHTML = `
+    <p class="phase-desc" style="max-width:760px">Durable instructions that apply to
+    <strong>all</strong> topics — replayed into every tutor chat and used whenever the
+    curriculum is updated. Per-topic instructions live in each topic's chat widget.
+    To add one here, say &ldquo;apply to all&rdquo; in any topic chat, then
+    &ldquo;Send to curriculum&rdquo;.</p>
+    <div class="section-label">Global instructions (apply to all)</div>
+    <div class="ctx-list" id="global-ctx"></div>`;
+  const list = document.getElementById("global-ctx");
+  if (!g.length) { list.innerHTML = '<div style="color:var(--ink-faint);font-size:13px">None yet.</div>'; return; }
+  for (const n of g) {
+    const div = document.createElement("div");
+    div.className = "ctx global";
+    div.innerHTML = `<span class="ctx-text">${esc(n.text)}</span><span class="ctx-scope">all</span><button title="Remove">&times;</button>`;
+    div.querySelector("button").addEventListener("click", async () => {
+      try {
+        await api("/api/context", { method: "DELETE", body: { topic_id: null, note_id: n.id } });
+        state.curriculum.global_context = g.filter((x) => x.id !== n.id);
+        renderPreferences(); updateBadge(); toast("Removed");
+      } catch (e) { toast(e.message); }
+    });
+    list.appendChild(div);
+  }
+}
+
+// ---------------- shell ----------------
+
+async function reloadData() {
+  const [curriculum, notes, inbox, sources] = await Promise.all([
+    api("/api/curriculum", null), api("/api/notes", null), api("/api/inbox", null), api("/api/sources", null),
+  ]);
+  state.curriculum = curriculum;
+  state.notes = notes;
+  state.inbox = inbox;
+  state.sources = sources;
+  updateBadge();
+}
+
+function goToTopic(id) {
+  state.view = "curriculum";
+  for (const t of document.querySelectorAll(".tab")) t.classList.toggle("active", t.dataset.view === "curriculum");
+  state.openTopics.add(id);
+  render();
+  const el = document.querySelector(`.topic[data-id="${id}"]`);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function render() {
+  if (state.view === "curriculum") renderCurriculum();
+  else if (state.view === "quiz") renderQuiz();
+  else if (state.view === "backlog") renderBacklog();
+  else if (state.view === "projects") renderProjects();
+  else renderPreferences();
+}
+
+for (const tab of document.querySelectorAll(".tab")) {
+  tab.addEventListener("click", () => {
+    state.view = tab.dataset.view;
+    for (const t of document.querySelectorAll(".tab")) t.classList.toggle("active", t === tab);
+    render();
+  });
+}
+
+document.getElementById("search").addEventListener("input", (e) => {
+  state.filter = e.target.value;
+  if (state.view === "curriculum") renderCurriculum();
+});
+
+document.querySelector("#chat-widget .cw-collapse").addEventListener("click", closeChat);
+document.getElementById("chat-reopen").addEventListener("click", () => { state.chat.open = true; renderChatWidget(); });
+document.querySelector("#chat-widget .cw-send").addEventListener("click", sendChat);
+document.querySelector("#chat-widget .cw-commit").addEventListener("click", commitChat);
+document.querySelector("#chat-widget .cw-input textarea").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(); }
+});
+
+reloadData().then(render).catch((e) => { main.innerHTML = `<p class="empty">${esc(e.message)}</p>`; });
+</script>
+</body>
+</html>

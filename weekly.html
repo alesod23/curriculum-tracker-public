@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weekly Learnings</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%A4%93</text></svg>">
+  <style>
+    :root {
+      --bg: #fafaf9;
+      --surface: #ffffff;
+      --surface-2: #f5f5f4;
+      --border: #e7e5e4;
+      --border-strong: #d6d3d1;
+      --text: #1c1917;
+      --text-muted: #78716c;
+      --accent: #1d4ed8;
+      --accent-soft: #eff6ff;
+      --mastered: #15803d;
+      --mastered-soft: #f0fdf4;
+      --introduced: #b45309;
+      --introduced-soft: #fffbeb;
+      --radius: 10px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--text);
+      font-size: 15px; line-height: 1.55;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; }
+    header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+    h1 { font-size: 28px; margin: 0; letter-spacing: -0.02em; }
+    .nav-link { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+    .nav-link:hover { color: var(--accent); }
+    .week-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 32px; }
+    .week-info { font-size: 14px; }
+    .week-info strong { font-variant-numeric: tabular-nums; }
+    .week-controls { display: flex; gap: 8px; align-items: center; }
+    select, button.btn {
+      font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-strong);
+      background: var(--surface); color: var(--text); cursor: pointer;
+    }
+    button.btn:hover { background: var(--surface-2); }
+    button.btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button.btn.primary:hover { background: #1e40af; }
+    button.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+    section { margin-bottom: 40px; }
+    section > h2 { font-size: 18px; margin: 0 0 6px; letter-spacing: -0.01em; }
+    section > .section-hint { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+    .empty {
+      padding: 24px; text-align: center; color: var(--text-muted); font-size: 14px;
+      background: var(--surface); border: 1px dashed var(--border-strong); border-radius: var(--radius);
+    }
+    .topic-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px; margin-bottom: 12px; box-shadow: var(--shadow-sm);
+    }
+    .topic-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .topic-head .title { font-weight: 600; font-size: 15px; }
+    .topic-head .phase { font-size: 12px; color: var(--text-muted); }
+    .topic-head .title a { color: var(--text); text-decoration: none; }
+    .topic-head .title a:hover { color: var(--accent); }
+    .example-list { list-style: none; padding: 0; margin: 0; }
+    .example-list > li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 14px; }
+    .example-list > li:first-child { border-top: none; }
+    .example-meta { color: var(--text-muted); font-size: 12px; font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+    .example-meta .from { color: var(--text); font-weight: 500; }
+    .example-text { color: var(--text); }
+    .example-quote { color: var(--text); font-style: italic; }
+    .example-why { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+    .moment {
+      background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: var(--radius);
+      padding: 12px 14px; margin-bottom: 8px;
+    }
+    .moment-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+    .moment-context { font-size: 14px; white-space: pre-wrap; }
+    .status-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; }
+    .status-pill.refresh { background: var(--surface-2); color: var(--text-muted); }
+    .status-pill.refresh.busy { background: var(--accent-soft); color: var(--accent); }
+    details > summary { cursor: pointer; color: var(--text-muted); font-size: 13px; padding: 4px 0; }
+    details[open] > summary { color: var(--text); }
+    .full-text { font-size: 13px; color: var(--text-muted); white-space: pre-wrap; padding-top: 6px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="top">
+      <h1>Weekly Learnings</h1>
+      <a class="nav-link" href="/">&larr; back to tracker</a>
+    </header>
+
+    <div class="week-bar">
+      <div class="week-info">
+        <strong id="week-label">…</strong>
+        <span id="week-range" style="color: var(--text-muted); margin-left: 8px;"></span>
+      </div>
+      <div class="week-controls">
+        <select id="week-select"></select>
+        <span class="status-pill refresh" id="refresh-status"></span>
+        <button class="btn" id="refresh-btn">Refresh now</button>
+      </div>
+    </div>
+
+    <section id="moments-section">
+      <h2>Saved moments</h2>
+      <p class="section-hint">Things you flagged during the week. Push these via <code>/save</code> in a Claude session.</p>
+      <div id="moments"></div>
+    </section>
+
+    <section id="your-section">
+      <h2>What you worked on</h2>
+      <p class="section-hint">Topics touched in your Claude sessions in the past week, with the prompt that started each.</p>
+      <div id="your-work"></div>
+    </section>
+
+    <section id="cdtm-section">
+      <h2>From CDTM Engineering</h2>
+      <p class="section-hint">Messages from the CDTM Engineering WhatsApp group that illustrate active curriculum topics.</p>
+      <div id="cdtm-eng"></div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (q) => document.querySelector(q);
+    const fmtDate = (iso) => iso ? iso.slice(0, 10) : "?";
+
+    function escapeHtml(s) {
+      return String(s || "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    function emptyEl(msg) {
+      const d = document.createElement("div");
+      d.className = "empty";
+      d.textContent = msg;
+      return d;
+    }
+
+    function topicCard({ topic_title, phase_title }, children) {
+      const card = document.createElement("div");
+      card.className = "topic-card";
+      card.innerHTML = `
+        <div class="topic-head">
+          <div class="title"><a href="/#topic-${escapeHtml(arguments[0].topic_id || "")}">${escapeHtml(topic_title)}</a></div>
+          <div class="phase">${escapeHtml(phase_title || "")}</div>
+        </div>`;
+      const list = document.createElement("ul");
+      list.className = "example-list";
+      for (const c of children) list.appendChild(c);
+      card.appendChild(list);
+      return card;
+    }
+
+    function renderCdtm(items) {
+      const root = $("#cdtm-eng");
+      root.innerHTML = "";
+      if (!items || !items.length) { root.appendChild(emptyEl("Nothing yet from CDTM Engineering for this week.")); return; }
+      for (const t of items) {
+        const lis = (t.examples || []).map((ex) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <div class="example-meta"><span class="from">${escapeHtml(ex.from || "unknown")}</span> · ${escapeHtml(fmtDate(ex.ts))}</div>
+            <div class="example-quote">"${escapeHtml(ex.evidence_quote || ex.text || "")}"</div>
+            <div class="example-why">${escapeHtml(ex.why || "")}</div>
+            <details><summary>full message</summary><div class="full-text">${escapeHtml(ex.text || "")}</div></details>`;
+          return li;
+        });
+        root.appendChild(topicCard(t, lis));
+      }
+    }
+
+    function renderYourWork(items) {
+      const root = $("#your-work");
+      root.innerHTML = "";
+      if (!items || !items.length) { root.appendChild(emptyEl("No sessions matched active topics this week.")); return; }
+      for (const t of items) {
+        const lis = (t.sessions || []).map((s) => {
+          const li = document.createElement("li");
+          const cwd = (s.cwd || "").split(/[\\/]/).slice(-2).join("/");
+          li.innerHTML = `
+            <div class="example-meta">${escapeHtml(fmtDate(s.started_at))}${cwd ? " · " + escapeHtml(cwd) : ""}</div>
+            <div class="example-text">${escapeHtml(s.first_prompt || "")}</div>
+            <div class="example-why">${escapeHtml(s.why || "")}</div>
+            ${s.evidence_quote ? `<details><summary>evidence</summary><div class="full-text">${escapeHtml(s.evidence_quote)}</div></details>` : ""}`;
+          return li;
+        });
+        root.appendChild(topicCard(t, lis));
+      }
+    }
+
+    function renderMoments(items) {
+      const root = $("#moments");
+      root.innerHTML = "";
+      if (!items || !items.length) {
+        root.appendChild(emptyEl("No saved moments yet. In any Claude session, run /save to flag a thought for this week."));
+        return;
+      }
+      for (const m of items) {
+        const d = document.createElement("div");
+        d.className = "moment";
+        const topicLabel = m.topic_title_guess ? ` · topic: ${escapeHtml(m.topic_title_guess)}` : "";
+        d.innerHTML = `
+          <div class="moment-meta">${escapeHtml(fmtDate(m.saved_at))} · ${escapeHtml(m.source || "chat")}${topicLabel}</div>
+          <div class="moment-context">${escapeHtml(m.context || "")}</div>`;
+        root.appendChild(d);
+      }
+    }
+
+    function currentWeekFromQS() {
+      const u = new URL(location.href);
+      return u.searchParams.get("week") || null;
+    }
+
+    async function load(week) {
+      const url = "/api/weekly" + (week ? "?week=" + encodeURIComponent(week) : "");
+      const res = await fetch(url);
+      const data = await res.json();
+      $("#week-label").textContent = data.week;
+      $("#week-range").textContent = data.range_start && data.range_end
+        ? `${data.range_start} → ${data.range_end}` : "(no data yet)";
+
+      const sel = $("#week-select");
+      const cur = data.week;
+      const weeks = data.weeks_available || [];
+      if (!weeks.includes(cur)) weeks.push(cur);
+      weeks.sort();
+      sel.innerHTML = "";
+      for (const w of weeks) {
+        const o = document.createElement("option");
+        o.value = w; o.textContent = w;
+        if (w === cur) o.selected = true;
+        sel.appendChild(o);
+      }
+
+      renderMoments(data.saved_moments || []);
+      renderYourWork(data.your_work || []);
+      renderCdtm(data.cdtm_eng || []);
+    }
+
+    $("#week-select").addEventListener("change", (e) => {
+      const w = e.target.value;
+      const u = new URL(location.href);
+      u.searchParams.set("week", w);
+      history.replaceState(null, "", u);
+      load(w);
+    });
+
+    $("#refresh-btn").addEventListener("click", async () => {
+      const btn = $("#refresh-btn");
+      const pill = $("#refresh-status");
+      btn.disabled = true;
+      pill.textContent = "running…";
+      pill.classList.add("busy");
+      try {
+        const res = await fetch("/api/weekly/refresh", { method: "POST" });
+        const data = await res.json();
+        const failed = (data.results || []).filter((r) => !r.ok);
+        pill.textContent = failed.length ? `error in ${failed.length}` : `done in ${(data.ms / 1000).toFixed(1)}s`;
+        pill.classList.remove("busy");
+        await load(currentWeekFromQS());
+      } catch (e) {
+        pill.textContent = "error";
+        pill.classList.remove("busy");
+      } finally {
+        btn.disabled = false;
+        setTimeout(() => { pill.textContent = ""; }, 5000);
+      }
+    });
+
+    load(currentWeekFromQS());
+  </script>
+</body>
+</html>

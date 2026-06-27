@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "migrated_at": "2026-01-01T00:00:00.000Z",
+  "source": "example seed — replace by teaching topics via /btw or capturing projects via /sde",
+  "phases": [
+    {
+      "id": "phase-1",
+      "num": 1,
+      "title": "Web Foundations — HTML & CSS",
+      "description": "The thing rendered in a browser. HTML defines structure (the bones), CSS defines presentation (the skin).",
+      "topics": [
+        {
+          "id": "html-fundamentals",
+          "title": "Fundamentals of HTML",
+          "desc": "semantic tags, document structure, links, images, forms",
+          "lesson": {
+            "def": "HTML is the language of structure. You write **tags** like <h1> (a top-level heading), <p> (paragraph), <a> (a link). The browser parses these into a tree called the **DOM**, then renders that tree to pixels.",
+            "example": {
+              "code": "<!DOCTYPE html>\n<html>\n  <head><title>Portfolio</title></head>\n  <body>\n    <h1>Hello</h1>\n    <p>A first page.</p>\n    <a href=\"/next.html\">Next</a>\n  </body>\n</html>",
+              "purpose": "Six tags become a renderable page: a tab title, a heading, a paragraph, and a clickable link."
+            },
+            "fp": [
+              {
+                "q": "Why use semantic tags like `<article>` instead of `<div>` everywhere?",
+                "a": "Screen readers and search engines need to know what a chunk of content IS. `<article>` says 'independent piece of content'; `<div>` says nothing."
+              }
+            ]
+          },
+          "history": [],
+          "status": "untouched"
+        }
+      ]
+    }
+  ]
+}

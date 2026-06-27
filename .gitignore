@@ -1,0 +1,21 @@
+# --- dependencies ---
+node_modules/
+
+# --- personal / private runtime data (NEVER commit) ---
+# data/ holds the user's real learning state, tutor chats, and crawled
+# third-party messages. Only the example seed is tracked.
+data/*
+!data/curriculum.example.json
+
+# crawl + weekly logs (may contain personal/3rd-party text)
+logs/
+
+# --- secrets ---
+.env
+.env.*
+!.env.example
+
+# --- misc ---
+*.tmp
+*.log
+.DS_Store
